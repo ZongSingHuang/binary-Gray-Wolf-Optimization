@@ -52,7 +52,7 @@ Zoo = pd.read_csv('Zoo.csv', header=None).values
 
 
 
-X_train, X_test, y_train, y_test = train_test_split(Zoo[:, :-1], Zoo[:, -1], stratify=Zoo[:, -1], test_size=0.2)
+X_train, X_test, y_train, y_test = train_test_split(Zoo[:, :-1], Zoo[:, -1], stratify=Zoo[:, -1], test_size=0.5)
 
 def Zoo_test(x):
     loss = np.zeros(x.shape[0])
@@ -60,7 +60,7 @@ def Zoo_test(x):
     for i in range(x.shape[0]):
         if np.sum(x[i, :])>0:
             knn = KNeighborsClassifier(n_neighbors=5).fit(X_train[:, x[i, :]], y_train)
-            score = accuracy_score(knn.predict(X_train[:, x[i, :]]), y_train)
+            score = accuracy_score(knn.predict(X_test[:, x[i, :]]), y_test)
             loss[i] = 0.99*(1-score) + 0.01*(np.sum(x[i, :])/X_train.shape[1])
         else:
             loss[i] = np.inf
@@ -68,7 +68,7 @@ def Zoo_test(x):
     return loss
 
 optimizer = BGWO(fit_func=Zoo_test, 
-                  num_dim=Zoo.shape[1]-1, num_particle=5, max_iter=70, x_max=1, x_min=0)
+                  num_dim=X_train.shape[1], num_particle=5, max_iter=70, x_max=1, x_min=0)
 optimizer.opt()
 
 feature = Zoo[:, :-1]
