@@ -5,4 +5,4 @@ http://dx.doi.org/10.1016/j.neucom.2015.06.083
 
 https://www.researchgate.net/publication/302151299_Binary_grey_wolf_optimizer_BGWO
 
-Zoo, knn(5), acc=0.714, loss=0.288, I don't know what happened
+Zoo, knn(5), acc=0.74510, loss=0.25548,  use 5/16 feature
