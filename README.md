@@ -5,4 +5,8 @@ http://dx.doi.org/10.1016/j.neucom.2015.06.083
 
 https://www.researchgate.net/publication/302151299_Binary_grey_wolf_optimizer_BGWO
 
-Zoo, knn(5), acc=0.74510, loss=0.25548,  use 5/16 feature
+data:Breastcancer
+
+50:50 acc:0.94286, feature:[2, 6]/9, loss:0.05879; acc:0.96286, feature:[0, 1, 2, 3, 4, 5, 6, 7, 8]/9, loss:None
+
+90:10 acc:0.94282, feature:[1, 2, 7, 8]/9, loss:0.05124; acc:0.96853, feature:[0, 1, 2, 3, 4, 5, 6, 7, 8]/9, loss:None
