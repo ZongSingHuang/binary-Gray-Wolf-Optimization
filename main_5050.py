@@ -5,7 +5,7 @@ Created on Mon Nov 23 21:29:10 2020
 @author: ZongSing_NB
 """
 
-from BGWO import BGWO
+from bGWO import bGWO
 import numpy as np
 import pandas as pd
 from sklearn.neighbors import KNeighborsClassifier
@@ -15,11 +15,11 @@ from sklearn.metrics import accuracy_score
 np.random.seed(42)
 
 # 讀資料
-Zoo = pd.read_csv('Zoo.csv', header=None).values
+Breastcancer = pd.read_csv('Breastcancer.csv', header=None).values
 
-X_train, X_test, y_train, y_test = train_test_split(Zoo[:, :-1], Zoo[:, -1], stratify=Zoo[:, -1], test_size=0.5)
+X_train, X_test, y_train, y_test = train_test_split(Breastcancer[:, :-1], Breastcancer[:, -1], stratify=Breastcancer[:, -1], test_size=0.5)
 
-def Zoo_test(x):
+def Breastcancer_test(x):
     loss = np.zeros(x.shape[0])
     
     for i in range(x.shape[0]):
@@ -32,12 +32,16 @@ def Zoo_test(x):
             print(666)
     return loss
 
-optimizer = BGWO(fit_func=Zoo_test, 
+optimizer = bGWO(fit_func=Breastcancer_test, 
                   num_dim=X_train.shape[1], num_particle=5, max_iter=70, x_max=1, x_min=0)
 optimizer.opt()
 
-feature = Zoo[:, :-1]
-label = Zoo[:, -1]
 knn = KNeighborsClassifier(n_neighbors=5)
 knn.fit(X_train[:, optimizer.gBest_X], y_train)
+print(np.sum(optimizer.gBest_X))
 print(accuracy_score(knn.predict(X_test[:, optimizer.gBest_X]), y_test))
+
+knn = KNeighborsClassifier(n_neighbors=5)
+knn.fit(X_train, y_train)
+print(X_train.shape[1])
+print(accuracy_score(knn.predict(X_test), y_test))

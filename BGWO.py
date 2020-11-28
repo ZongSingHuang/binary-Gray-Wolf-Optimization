@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 
 np.random.seed(42)
 
-class BGWO():
+class bGWO():
     def __init__(self, fit_func, num_dim=30, num_particle=20, max_iter=500, 
                  x_max=1, x_min=0, a_max=2, a_min=0):
         self.fit_func = fit_func
