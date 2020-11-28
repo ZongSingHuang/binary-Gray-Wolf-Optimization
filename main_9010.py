@@ -21,6 +21,8 @@ X = Breastcancer[:, :-1]
 y = Breastcancer[:, -1]
 
 def Breastcancer_test(x):
+    if x.ndim==1:
+        x = x.reshape(1, -1)
     loss = np.zeros(x.shape[0])
     
     for i in range(x.shape[0]):

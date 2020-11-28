@@ -20,6 +20,8 @@ Breastcancer = pd.read_csv('Breastcancer.csv', header=None).values
 X_train, X_test, y_train, y_test = train_test_split(Breastcancer[:, :-1], Breastcancer[:, -1], stratify=Breastcancer[:, -1], test_size=0.5)
 
 def Breastcancer_test(x):
+    if x.ndim==1:
+        x = x.reshape(1, -1)
     loss = np.zeros(x.shape[0])
     
     for i in range(x.shape[0]):
