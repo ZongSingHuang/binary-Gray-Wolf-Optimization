@@ -16,15 +16,21 @@ np.random.seed(42)
 
 class bGWO():
     def __init__(self, fit_func, num_dim=30, num_particle=20, max_iter=500, 
-                 x_max=1, x_min=0, a_max=2, a_min=0):
+                 a_max=2, a_min=0):
         self.fit_func = fit_func
         self.num_dim = num_dim
         self.num_particle = num_particle
         self.max_iter = max_iter
-        self.x_max = x_max
-        self.x_min = x_min
         self.a_max = a_max
         self.a_min = a_min
+        
+        self.score_alpha = np.inf
+        self.score_beta = np.inf
+        self.score_delta = np.inf
+        self.X_alpha = np.zeros(self.num_dim)
+        self.X_beta = np.zeros(self.num_dim)
+        self.X_delta = np.zeros(self.num_dim)
+        self.gBest_X = np.zeros(self.num_dim)
         
         self._iter = 0
         self.gBest_X = None
@@ -37,7 +43,7 @@ class bGWO():
         self.X_beta = None
         self.X_delta = None
 
-        self.X = 1*(np.random.uniform(low=self.x_min, high=self.x_max, size=[self.num_particle, self.num_dim])>0.5)
+        self.X = 1*(np.random.uniform(size=[self.num_particle, self.num_dim])>0.5)
         
         self.update_score()
         
@@ -78,7 +84,9 @@ class bGWO():
                 self.X[i, :] = self.crossover(X1, X2, X3)
             
             self.update_score()
-            
+            self.gBest_X = self.X_alpha.copy()
+            self.gBest_score = self.score_alpha.copy()
+            self.gBest_curve[self._iter] = self.score_alpha.copy()
             self._iter = self._iter + 1
         
     def plot_curve(self):
@@ -93,20 +101,26 @@ class bGWO():
         score_all = self.fit_func(self.X)
         for idx, score in  enumerate(score_all):
             if score<self.score_alpha:
+                # ---EvoloPy ver.---
+                self.score_delta = self.score_beta
+                self.X_delta = self.X_beta
+                self.score_beta = self.score_alpha
+                self.X_beta = self.X_alpha
+                # ------------------
                 self.score_alpha = score.copy()
                 self.X_alpha = self.X[idx, :].copy()
                 
             if score>self.score_alpha and score<self.score_beta:
+                # ---EvoloPy ver.---
+                self.score_delta = self.score_beta
+                self.X_delta = self.X_beta
+                # ------------------
                 self.score_beta = score.copy()
                 self.X_beta = self.X[idx, :].copy()
             
             if score>self.score_alpha and score>self.score_beta and score<self.score_delta:
                 self.score_delta = score.copy()
                 self.X_delta = self.X[idx, :].copy()
-        
-        self.gBest_X = self.X_alpha.copy()
-        self.gBest_score = self.score_alpha.copy()
-        self.gBest_curve[self._iter] = self.score_alpha.copy()
     
     def crossover(self, X1, X2, X3):
         r = np.random.uniform(size=self.num_dim)
